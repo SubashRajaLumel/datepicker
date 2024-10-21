@@ -147,3 +147,8 @@
 .year-row {
   border-bottom: 1px solid #a0a096;
 }
+
+.selected-month {
+  background-color: #90caf9; /* Light blue background for selected months */
+  color: white; /* White text for better contrast */
+}
