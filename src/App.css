@@ -149,6 +149,6 @@
 }
 
 .selected-month {
-  background-color: #90caf9; /* Light blue background for selected months */
-  color: white; /* White text for better contrast */
+  background-color: #90ee90;
+  border-radius: 50%;
 }

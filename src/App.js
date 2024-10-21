@@ -108,15 +108,14 @@ function App() {
           onQuarterChange={handleQuarterChange}
         />
         <Calendar
-          onChange={handleMonthChange} // Handles month change
+          onChange={handleMonthChange}
           value={null}
           tileClassName={({ date }) => {
             const monthStr = `${date.getFullYear()}-${date.getMonth()}`;
             return selectedMonths.includes(monthStr) ? "selected-month" : null;
           }}
           selectRange={false}
-          view="year" // Set view to year to allow month selection
-          tileDisabled={({ date }) => date.getDate() !== 1} // Disable all days except the first of each month
+          view="year"
           formatShortWeekday={(locale, date) =>
             ["S", "M", "T", "W", "T", "F", "S"][date.getDay()]
           }
