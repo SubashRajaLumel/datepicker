@@ -104,3 +104,46 @@
   padding: 0.5em 0.5em;
   background: none;
 }
+
+.quarter-year-selector {
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #a0a096;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.year-row,
+.quarter-row {
+  display: flex;
+}
+
+.year-button,
+.quarter-button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.year-button:hover,
+.quarter-button:hover {
+  background-color: #e0e0e0;
+}
+
+.year-button.selected,
+.quarter-button.selected {
+  background-color: #4285f4;
+  color: white;
+}
+
+.year-button:not(:last-child),
+.quarter-button:not(:last-child) {
+  border-right: 1px solid #a0a096;
+}
+
+.year-row {
+  border-bottom: 1px solid #a0a096;
+}
