@@ -1,129 +1,157 @@
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import "./App.css";
+import React, { useState, useMemo } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getExpandedRowModel,
+  flexRender,
+  createColumnHelper,
+} from '@tanstack/react-table';
+import { ChevronRight, ChevronDown } from 'lucide-react';
 
-function QuarterYearSelector({
-  selectedYears,
-  selectedQuarters,
-  onYearChange,
-  onQuarterChange,
-}) {
-  const years = [2011, 2012, 2013, 2014];
-  const quarters = ["Q1", "Q2", "Q3", "Q4"];
+const initialData = [
+  {
+    id: '1',
+    name: 'Category A',
+    revenue: 50000,
+    subRows: [
+      {
+        id: '1-1',
+        name: 'Subcategory A1',
+        revenue: 20000,
+        subRows: [
+          { id: '1-1-1', name: 'Product A1.1', revenue: 10000 },
+          { id: '1-1-2', name: 'Product A1.2', revenue: 10000 }
+        ]
+      },
+      {
+        id: '1-2',
+        name: 'Subcategory A2',
+        revenue: 30000,
+        subRows: [
+          { id: '1-2-1', name: 'Product A2.1', revenue: 15000 },
+          { id: '1-2-2', name: 'Product A2.2', revenue: 15000 }
+        ]
+      }
+    ]
+  },
+  {
+    id: '2',
+    name: 'Category B',
+    revenue: 40000,
+    subRows: [
+      {
+        id: '2-1',
+        name: 'Subcategory B1',
+        revenue: 40000,
+        subRows: [
+          { id: '2-1-1', name: 'Product B1.1', revenue: 20000 },
+          { id: '2-1-2', name: 'Product B1.2', revenue: 20000 }
+        ]
+      }
+    ]
+  }
+];
 
-  const handleYearClick = (year) => {
-    onYearChange(year);
-  };
+const App = () => {
+  const columnHelper = createColumnHelper();
+  
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor('name', {
+        header: 'Name',
+        cell: ({ row, getValue }) => (
+          <div
+            className="flex items-center gap-2"
+            style={{
+              paddingLeft: `${row.depth * 24}px`,
+            }}
+          >
+            {row.getCanExpand() ? (
+              <button
+                className="p-1 hover:bg-gray-200 rounded"
+                onClick={row.getToggleExpandedHandler()}
+              >
+                {row.getIsExpanded() ? (
+                  <ChevronDown className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                )}
+              </button>
+            ) : (
+              <span className="w-6" />
+            )}
+            {getValue()}
+          </div>
+        ),
+      }),
+      columnHelper.accessor('revenue', {
+        header: 'Revenue',
+        cell: ({ getValue }) => (
+          <div className="text-right">
+            ${getValue().toLocaleString()}
+          </div>
+        ),
+      }),
+    ],
+    []
+  );
 
-  const handleQuarterClick = (quarter) => {
-    onQuarterChange(quarter);
-  };
+  const [expanded, setExpanded] = useState({});
+
+  const table = useReactTable({
+    data: initialData,
+    columns,
+    state: {
+      expanded,
+    },
+    onExpandedChange: setExpanded,
+    getSubRows: row => row.subRows,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+  });
 
   return (
-    <div className="quarter-year-selector">
-      <div className="year-row">
-        {years.map((year) => (
-          <button
-            key={year}
-            className={`year-button ${
-              selectedYears.includes(year) ? "selected" : ""
-            }`}
-            onClick={() => handleYearClick(year)}
-          >
-            {year}
-          </button>
-        ))}
-      </div>
-      <div className="quarter-row">
-        {quarters.map((quarter) => (
-          <button
-            key={quarter}
-            className={`quarter-button ${
-              selectedQuarters.includes(quarter) ? "selected" : ""
-            }`}
-            onClick={() => handleQuarterClick(quarter)}
-          >
-            {quarter}
-          </button>
-        ))}
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="bg-white shadow rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th
+                    key={header.id}
+                    className="p-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {table.getRowModel().rows.map(row => (
+              <tr
+                key={row.id}
+                className="hover:bg-gray-50"
+              >
+                {row.getVisibleCells().map(cell => (
+                  <td key={cell.id} className="p-4">
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-}
-
-function App() {
-  const [selectedYears, setSelectedYears] = useState([2014]);
-  const [selectedQuarters, setSelectedQuarters] = useState(["Q4"]);
-  const [selectedMonths, setSelectedMonths] = useState([]); // State for selected months
-
-  const handleYearChange = (year) => {
-    setSelectedYears((prevYears) => {
-      if (prevYears.includes(year)) {
-        return prevYears.filter((y) => y !== year);
-      } else {
-        return [...prevYears, year];
-      }
-    });
-  };
-
-  const handleQuarterChange = (quarter) => {
-    setSelectedQuarters((prevQuarters) => {
-      if (prevQuarters.includes(quarter)) {
-        return prevQuarters.filter((q) => q !== quarter);
-      } else {
-        return [...prevQuarters, quarter];
-      }
-    });
-  };
-
-  const handleMonthChange = (date) => {
-    setSelectedMonths((prevMonths) => {
-      const monthStr = `${date.getFullYear()}-${date.getMonth()}`;
-      if (prevMonths.includes(monthStr)) {
-        return prevMonths.filter((m) => m !== monthStr);
-      } else {
-        return [...prevMonths, monthStr];
-      }
-    });
-  };
-
-  const getWeekNumber = (date) => {
-    const d = new Date(
-      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-    );
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-  };
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <QuarterYearSelector
-          selectedYears={selectedYears}
-          selectedQuarters={selectedQuarters}
-          onYearChange={handleYearChange}
-          onQuarterChange={handleQuarterChange}
-        />
-        <Calendar
-          onChange={handleMonthChange}
-          value={null}
-          tileClassName={({ date }) => {
-            const monthStr = `${date.getFullYear()}-${date.getMonth()}`;
-            return selectedMonths.includes(monthStr) ? "selected-month" : null;
-          }}
-          selectRange={false}
-          view="year"
-          formatShortWeekday={(locale, date) =>
-            ["S", "M", "T", "W", "T", "F", "S"][date.getDay()]
-          }
-          formatWeekNumber={(date) => `W${getWeekNumber(date)}`}
-        />
-      </header>
-    </div>
-  );
-}
+};
 
 export default App;
