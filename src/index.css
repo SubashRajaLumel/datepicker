@@ -30,13 +30,6 @@ button {
   border: 1px solid #f3f4f6;
 }
 
-.year-month-button {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  text-align: center;
-  transition: background-color 0.2s;
-}
-
 .date-picker-nav-button {
   padding: 0.5rem;
   background-color: transparent;
@@ -54,21 +47,25 @@ button {
   cursor: pointer;
 }
 
-.fiscal-quarter-picker-button {
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  text-align: center;
-  border-radius: 0.5rem;
-  transition: 'background-color 0.2s';
-}
-
-.fiscal-quarter-picker-month-button {
+.fiscal-month-button {
   width: 100%;
   padding: 0.5rem 1rem;
   text-align: center;
   border-radius: 0.25rem;
   font-size: 0.875rem;
   transition: background-color 0.2s;
+  border: none;
+  background-color: transparent;
+  color: #333;
+}
+
+.fiscal-quarter-picker-month-button.selected {
+  background-color: #f0f2f5;
+  font-weight: bold;
+}
+
+.fiscal-quarter-picker-month-button:hover:not(.selected) {
+  background-color: #e5e7eb;
 }
 
 /* span */

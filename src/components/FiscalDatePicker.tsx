@@ -296,7 +296,7 @@ const FiscalDatePicker: React.FC<FiscalDatePickerProps> = ({ fiscalStartMonth = 
             <button
               key={index}
               onClick={() => toggleMonthSelection(month.date)}
-              className="year-month-button"
+              className="fiscal-month-button"
               style={{
                 ...(isSelected ? {
                   backgroundColor: '#bfdbfe',
