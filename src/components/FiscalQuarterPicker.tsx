@@ -85,7 +85,7 @@ export const FiscalQuarterPicker: React.FC<FiscalQuarterPickerProps> = ({
             <button key={quarter}
               onClick={() => handleQuarterSelect(quarter)}
               className={"fiscal-month-button"}
-              style={{ backgroundColor: isSelected ? '#BFDBFE' : '', color: isSelected ? '#3B82F6' : '#6B7280' }}
+              style={{ backgroundColor: isSelected ? '#BFDBFE' : '' }}
             >
               <span className="fiscal-quarter-picker-button-text">Q{quarter}</span>
             </button>
@@ -105,7 +105,7 @@ export const FiscalQuarterPicker: React.FC<FiscalQuarterPickerProps> = ({
                   <button
                     key={month}
                     onClick={() => handleMonthSelect(date, quarter)}
-                    className={"fiscal-month-button"} style={{ backgroundColor: isMonthInQuarter ? '#BFDBFE' : '', color: isMonthInQuarter ? '#3B82F6' : '#6B7280' }}
+                    className={"fiscal-month-button"} style={{ backgroundColor: isMonthInQuarter ? '#BFDBFE' : '' }}
                   >
                     {date.toLocaleString('default', { month: 'short' })}
                   </button>
