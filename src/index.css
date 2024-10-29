@@ -71,10 +71,7 @@ button {
   transition: background-color 0.2s;
 }
 
-span {
-  color: #000;
-}
-
+/* span */
 .date-picker-selection-text {
   font-size: 0.875rem;
   color: #3b82f6;
@@ -84,9 +81,7 @@ span {
   font-weight: 500;
 }
 
-label {
-  color: #000;
-}
+/* label */
 
 .date-picker-nav-label {
   width: 1.25rem;

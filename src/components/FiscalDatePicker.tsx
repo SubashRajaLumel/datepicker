@@ -336,6 +336,27 @@ const FiscalDatePicker: React.FC<FiscalDatePickerProps> = ({ fiscalStartMonth = 
 
   return (
     <div className="fiscal-date-picker">
+      {((mode === 'date' && selectedDates.length > 0) ||
+        (mode === 'yearMonth' && selectedMonths.length > 0) ||
+        ((mode === 'yearQuarterMonth' || mode === 'multiYearQuarterMonth') && (selectedMonths.length > 0 || selectedQuarters.length > 0))) && (
+          <div className="date-picker-selection">
+            <span className="date-picker-selection-text">
+              {mode === 'date'
+                ? selectedDates.length < 2 ? selectedDates[0].toDateString() + ' selected' : `${selectedDates.length} date${selectedDates.length !== 1 ? 's' : ''} selected`
+                : mode === 'yearMonth'
+                  ? selectedMonths.length < 2 ? selectedMonths[0] + ' selected' : `${selectedMonths.length} month${selectedMonths.length !== 1 ? 's' : ''} selected`
+                  : selectedMonths.length < 2 && mode === 'yearQuarterMonth' ? selectedMonths[0] + ' selected' : `${selectedQuarters.length} quarter${selectedQuarters.length !== 1 ? 's' : ''}, ${selectedMonths.length} month${selectedMonths.length !== 1 ? 's' : ''} selected`
+              }
+            </span>
+            <button
+              onClick={clearSelection}
+              className="date-picker-clear-button"
+            >
+              <label className="date-picker-clear-label" >X</label>
+              Clear
+            </button>
+          </div>
+        )}
       <div className="date-picker-header">
         <button
           onClick={() => mode === 'date' ? changeMonth(-1) : mode === 'yearQuarterMonth' || mode === 'yearMonth' ? changeYear(-1) : changeYears(-1)}
@@ -359,27 +380,7 @@ const FiscalDatePicker: React.FC<FiscalDatePickerProps> = ({ fiscalStartMonth = 
         </button>
       </div>
 
-      {((mode === 'date' && selectedDates.length > 0) ||
-        (mode === 'yearMonth' && selectedMonths.length > 0) ||
-        ((mode === 'yearQuarterMonth' || mode === 'multiYearQuarterMonth') && (selectedMonths.length > 0 || selectedQuarters.length > 0))) && (
-          <div className="date-picker-selection">
-            <span className="date-picker-selection-text">
-              {mode === 'date'
-                ? selectedDates.length < 2 ? selectedDates[0].toDateString() + ' selected' : `${selectedDates.length} date${selectedDates.length !== 1 ? 's' : ''} selected`
-                : mode === 'yearMonth'
-                  ? selectedMonths.length < 2 ? selectedMonths[0] + ' selected' : `${selectedMonths.length} month${selectedMonths.length !== 1 ? 's' : ''} selected`
-                  : selectedMonths.length < 2 && mode === 'yearQuarterMonth' ? selectedMonths[0] + ' selected' : `${selectedQuarters.length} quarter${selectedQuarters.length !== 1 ? 's' : ''}, ${selectedMonths.length} month${selectedMonths.length !== 1 ? 's' : ''} selected`
-              }
-            </span>
-            <button
-              onClick={clearSelection}
-              className="date-picker-clear-button"
-            >
-              <label className="date-picker-clear-label" >X</label>
-              Clear
-            </button>
-          </div>
-        )}
+
 
       {mode === 'date' ? renderDatePicker() :
         mode === 'yearMonth' ? renderYearMonthPicker() :
